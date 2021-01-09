@@ -72,6 +72,8 @@ model Activity {
     name            String
     distance        Float
     type            String
+    elapsedTime     Float @map(name: "elapsed_time")
+    movingTime      Float @map(name: "moving_time")
     startDate       String @map(name: "start_date")
     averageSpeed    Float  @map(name: "average_speed")
     averageCadence  Float  @map(name: "average_cadence")

@@ -18,6 +18,8 @@ const Activity = objectType({
     t.model.averageCadence();
     t.model.locationCountry();
     t.model.user();
+    t.model.movingTime();
+    t.model.elapsedTime();
   },
 });
 

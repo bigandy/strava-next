@@ -1,17 +1,17 @@
-import { useMemo, Fragment } from "react";
+import { useMemo, Fragment, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
-import { post } from "../utils/fetch";
 import { useQuery } from "@apollo/client";
-import { USER_ACTIVITIES_QUERY } from "../graphql/userActivitiesQuery";
 import { Button, Fab } from "@material-ui/core";
 import NavigationIcon from "@material-ui/icons/Navigation";
 
+import { post } from "utils/fetch";
+import { USER_ACTIVITIES_QUERY } from "graphql/userActivitiesQuery";
+
+import RunList from "components/RunList";
+
 export default function Page() {
   const [session, loading] = useSession();
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  const [distanceFormat, setDistanceFormat] = useState("miles");
 
   const getActivities = async () => {
     if (session) {
@@ -20,19 +20,24 @@ export default function Page() {
     }
   };
 
-  let run;
-
-  const { data } = useQuery(USER_ACTIVITIES_QUERY, {
+  const { data, error } = useQuery(USER_ACTIVITIES_QUERY, {
     variables: { userId: session?.user?.userId },
   });
 
-  run = useMemo(() => {
+  const run = useMemo(() => {
     if (data) {
       return data.activities;
     }
   }, [data]);
 
-  console.log(data);
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    console.error({ error });
+    return <p>Error...</p>;
+  }
 
   return (
     <Fragment>
@@ -61,7 +66,11 @@ export default function Page() {
             <NavigationIcon />
             Get activities
           </Fab>
-          {run && run.length && run.map((run) => <h3>{run.averageCadence}</h3>)}
+          {run && run.length > 0 ? (
+            <RunList data={run} distanceFormat={distanceFormat} />
+          ) : (
+            <div>No Run Info</div>
+          )}
         </Fragment>
       )}
     </Fragment>
