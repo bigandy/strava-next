@@ -8,10 +8,13 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+1. Copy `.env.example` to `.env` and input Strava STRAVA_CLIENT_ID and STRAVA_CLIENT_SECRET
 1. Run `npm i` to install npm deps
-2. With docker on your machine run `docker pull`
-3. In one Terminal tab run `docker-compose up`
-4. To run the prisma database creation run `npx prisma ...`
+1. With docker on your machine run `docker pull`
+1. In one Terminal tab run `docker-compose up`
+1. To run the prisma database creation run `make init`
+1. In a new tab run `npm run dev` to run the dev server
+1. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 First, run the development server:
 
