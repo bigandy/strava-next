@@ -1,20 +1,23 @@
-import { useMemo, Fragment, useState } from "react";
+import { useMemo, useEffect, Fragment, useState } from "react";
+import Head from "next/head";
 import { signIn, signOut, useSession } from "next-auth/client";
+
 import { useQuery } from "@apollo/client";
-import { Button, Fab } from "@material-ui/core";
+import { Button, Fab, ButtonGroup } from "@material-ui/core";
 import NavigationIcon from "@material-ui/icons/Navigation";
 
 import { post } from "utils/fetch";
 import { USER_ACTIVITIES_QUERY } from "graphql/userActivitiesQuery";
 
 import RunList from "components/RunList";
+import ThisYearSummary from "components/ThisYearSummary";
 
 export default function Page() {
   const [session, loading, sessionError] = useSession();
 
-  console.log({ sessionError });
-
   const [distanceFormat, setDistanceFormat] = useState("miles");
+  const [runDistance, setRunDistance] = useState(0);
+  const [runCount, setRunCount] = useState(0);
 
   const getActivities = async () => {
     if (session) {
@@ -22,6 +25,19 @@ export default function Page() {
       return response;
     }
   };
+
+  const runsThisYear = useMemo(async () => {
+    if (session) {
+      const { runsThisYear } = await post(`/api/athlete/get`, {}).then((res) =>
+        res.json()
+      );
+
+      const { count, distance } = await runsThisYear;
+
+      setRunCount(count);
+      setRunDistance(distance);
+    }
+  }, [session]);
 
   const { data, error } = useQuery(USER_ACTIVITIES_QUERY, {
     variables: { userId: session?.user?.userId },
@@ -44,6 +60,25 @@ export default function Page() {
 
   return (
     <Fragment>
+      <Head>
+        <title>Homepage</title>
+      </Head>
+      <div>
+        <ButtonGroup disableElevation variant="contained" color="primary">
+          <Button
+            onClick={() => setDistanceFormat("miles")}
+            disabled={distanceFormat === "miles"}
+          >
+            Miles
+          </Button>
+          <Button
+            onClick={() => setDistanceFormat("kilometers")}
+            disabled={distanceFormat === "kilometers"}
+          >
+            Kilometers
+          </Button>
+        </ButtonGroup>
+      </div>
       {!session && (
         <Fragment>
           Not signed in <br />
@@ -69,7 +104,14 @@ export default function Page() {
             <NavigationIcon />
             Get activities
           </Fab>
-          {<RunList data={run} distanceFormat={distanceFormat} />}
+          {runsThisYear && (
+            <ThisYearSummary
+              runDistance={runDistance}
+              runCount={runCount}
+              distanceFormat={distanceFormat}
+            />
+          )}
+          <RunList data={run} distanceFormat={distanceFormat} />
         </Fragment>
       )}
     </Fragment>

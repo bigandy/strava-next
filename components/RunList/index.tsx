@@ -9,6 +9,10 @@ import {
   Divider,
 } from "@material-ui/core";
 
+const formatTime = (seconds) => {
+  return (seconds / 60).toFixed(1);
+};
+
 const RunList = ({ data, distanceFormat }) => {
   if (!data || data.length === 0) {
     return <div>No Data</div>;
@@ -36,9 +40,11 @@ const RunList = ({ data, distanceFormat }) => {
 
                 <CardContent>
                   <h3>{run.startDate}</h3>
-                  <h4>Distance - {distance}</h4>
-                  <h4>Moving Time - {run.movingTime}</h4>
-                  <h4>Elapsed Time - {run.elapsedTime}</h4>
+                  <h4>
+                    Distance - {distance} {distanceFormat}
+                  </h4>
+                  <h4>Moving Time - {formatTime(run.movingTime)} minutes</h4>
+                  <h4>Elapsed Time - {formatTime(run.elapsedTime)} minutes</h4>
                 </CardContent>
               </Card>
             </Grid>
