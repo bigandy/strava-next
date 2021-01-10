@@ -1,7 +1,8 @@
 // import strava from "strava-v3";
 import { getSession } from "next-auth/client";
 import { PrismaClient } from "@prisma/client";
-import { getStravaClient } from "../../../utils/getStravaClient";
+
+import { getStravaClient } from "utils/getStravaClient";
 
 export default async function get(req, res) {
   const prisma = new PrismaClient();
@@ -9,13 +10,8 @@ export default async function get(req, res) {
   const { user } = session;
   const strava = await getStravaClient(user);
 
-
-  // const nowSeconds = Math.floor(Date.now() / 1000);
-
   const payload = await strava.athlete.listActivities({
   });
-
-  console.log({ payload });
 
     if (payload) {
       payload

@@ -11,6 +11,7 @@ export async function getUserStravaToken(user) {
     return tokens[0];
   }
 }
+
 export async function rotateAccessToken(user) {
   const { refreshToken } = await getUserStravaToken(user);
   const { access_token, refresh_token } = await strava.oauth.refreshToken(

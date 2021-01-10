@@ -10,7 +10,10 @@ import { USER_ACTIVITIES_QUERY } from "graphql/userActivitiesQuery";
 import RunList from "components/RunList";
 
 export default function Page() {
-  const [session, loading] = useSession();
+  const [session, loading, sessionError] = useSession();
+
+  console.log({ sessionError });
+
   const [distanceFormat, setDistanceFormat] = useState("miles");
 
   const getActivities = async () => {
@@ -66,11 +69,7 @@ export default function Page() {
             <NavigationIcon />
             Get activities
           </Fab>
-          {run && run.length > 0 ? (
-            <RunList data={run} distanceFormat={distanceFormat} />
-          ) : (
-            <div>No Run Info</div>
-          )}
+          {<RunList data={run} distanceFormat={distanceFormat} />}
         </Fragment>
       )}
     </Fragment>
