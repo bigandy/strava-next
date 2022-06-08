@@ -21,7 +21,7 @@ export default async function get(req, res) {
     if (stravaAthleteId === null) {
       const { id } = await strava.athlete.get();
       stravaAthleteId = id;
-      console.log({ stravaAthleteId });
+      // console.log({ stravaAthleteId });
 
       // 2. Add it to the user object in the database.
       await prisma.user.update({
@@ -33,9 +33,9 @@ export default async function get(req, res) {
         },
       });
 
-      console.log("added to user");
+      // console.log("added to user");
     } else {
-      console.log("already have stravaUserId");
+      // console.log("already have stravaUserId");
     }
 
     const payload = await strava.athletes.stats({ id: stravaAthleteId });

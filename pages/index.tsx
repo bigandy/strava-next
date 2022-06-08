@@ -21,8 +21,11 @@ export default function Page() {
 
   const getActivities = async () => {
     if (session) {
-      const response = await post(`/api/activities/get`, {});
-      return response;
+      const { payload } = await post(`/api/activities/get`, {}).then((res) =>
+        res.json()
+      );
+      console.log({ payload });
+      return payload;
     }
   };
 

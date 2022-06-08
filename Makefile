@@ -7,10 +7,10 @@ run-migration:
 generate-schema:
 	npm run generate
 
-setup: npm-setup docker-setups
+setup: npm-setup docker-setup
 
 npm-setup:
-	npm install; typedoc
+	npm install
 
 docker-setup:
 	docker-compose pull

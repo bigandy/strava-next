@@ -11,7 +11,7 @@ const options = {
       id: "strava",
       name: "Strava",
       type: "oauth",
-      scope: "activity:read",
+      scope: "activity:read_all,activity:write",
       version: "2.0",
       clientId: process.env.STRAVA_CLIENT_ID,
       clientSecret: process.env.STRAVA_CLIENT_SECRET,

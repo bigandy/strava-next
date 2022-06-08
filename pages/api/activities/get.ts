@@ -10,8 +10,14 @@ export default async function get(req, res) {
   const { user } = session;
   const strava = await getStravaClient(user);
 
-  const payload = await strava.athlete.listActivities({
-  });
+  try {
+    const payload = await strava.athlete.listActivities({});
+
+    console.log({
+      runs: payload
+        .filter((activity) => activity.type === "Run")
+        .filter((activity) => activity.max_speed < 3),
+    });
 
     if (payload) {
       payload
@@ -33,11 +39,24 @@ export default async function get(req, res) {
             },
           });
         });
-      }
-    res.status(200).json({ payload: payload.filter((activity) => activity.type === "Run") });
+    }
+    res.status(200).json({
+      payload: payload
+        .filter((activity) => activity.type === "Run")
+        .filter((activity) => activity.max_speed < 4)
+        .map((activity) => {
+          return {
+            id: activity.id,
+            max_speed: activity.max_speed,
+          };
+        }),
+    });
+  } catch (error) {
+    console.log("THERE IS AN ERROR", { error: error.error.errors });
+    res.status(500).json({ payload: [] });
+  }
+
   // } catch (error) {
   //   res.status(400).json({error})
   // }
-
-
 }
