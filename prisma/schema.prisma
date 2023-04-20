@@ -2,12 +2,12 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
 }
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 model Account {
@@ -22,7 +22,6 @@ model Account {
     accessTokenExpires DateTime? @map(name: "access_token_expires")
     createdAt          DateTime  @default(now()) @map(name: "created_at")
     updatedAt          DateTime  @default(now()) @map(name: "updated_at")
-
 
     @@index([providerAccountId], name: "providerAccountId")
     @@index([providerId], name: "providerId")
@@ -43,16 +42,17 @@ model Session {
 }
 
 model User {
-    id            Int       @id @default(autoincrement())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime? @map(name: "email_verified")
-    image         String?
-    createdAt     DateTime  @default(now()) @map(name: "created_at")
-    updatedAt     DateTime  @default(now()) @map(name: "updated_at")
-    stravaAthleteId Int? @map(name: "strava_athlete_id")
+    id              Int       @id @default(autoincrement())
+    name            String?
+    email           String?   @unique
+    emailVerified   DateTime? @map(name: "email_verified")
+    image           String?
+    createdAt       DateTime  @default(now()) @map(name: "created_at")
+    updatedAt       DateTime  @default(now()) @map(name: "updated_at")
+    stravaAthleteId Int?      @map(name: "strava_athlete_id")
 
     activities Activity[]
+
     @@map(name: "users")
 }
 
@@ -73,8 +73,8 @@ model Activity {
     name            String
     distance        Float
     type            String
-    elapsedTime     Float @map(name: "elapsed_time")
-    movingTime      Float @map(name: "moving_time")
+    elapsedTime     Float  @map(name: "elapsed_time")
+    movingTime      Float  @map(name: "moving_time")
     startDate       String @map(name: "start_date")
     averageSpeed    Float  @map(name: "average_speed")
     averageCadence  Float  @map(name: "average_cadence")

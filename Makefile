@@ -18,7 +18,7 @@ docker-setup:
 run-docker:
 	docker-compose up
 
-run-truenorth:
+run-app:
 	npm run dev
 
 init: run-migration generate-schema
